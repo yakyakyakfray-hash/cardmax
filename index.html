@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>CardMax — Credit Card Reward Tracker</title>
+<link rel="manifest" href="manifest.json">
+<meta name="theme-color" content="#1f3864">
+<link rel="icon" href="icons/favicon-32.png" sizes="32x32" type="image/png">
+<link rel="apple-touch-icon" href="icons/apple-touch-icon-180.png">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="CardMax">
+<link rel="stylesheet" href="styles.css">
+</head>
+<body>
+
+<!-- Sign-in gate (shown in Firebase mode until the user is authenticated) -->
+<div class="login app-hidden" id="login">
+  <div class="loginCard">
+    <div class="logo">💳</div>
+    <h1>CardMax</h1>
+    <p class="tag">Your credit-card reward tracker</p>
+    <button class="gbtn" id="loginBtn">
+      <svg class="gicon" viewBox="0 0 48 48" aria-hidden="true"><path fill="#EA4335" d="M24 9.5c3.54 0 6.71 1.22 9.21 3.6l6.85-6.85C35.9 2.38 30.47 0 24 0 14.62 0 6.51 5.38 2.56 13.22l7.98 6.19C12.43 13.72 17.74 9.5 24 9.5z"/><path fill="#4285F4" d="M46.98 24.55c0-1.57-.15-3.09-.38-4.55H24v9.02h12.94c-.58 2.96-2.26 5.48-4.78 7.18l7.73 6c4.51-4.18 7.09-10.36 7.09-17.65z"/><path fill="#FBBC05" d="M10.53 28.59c-.48-1.45-.76-2.99-.76-4.59s.27-3.14.76-4.59l-7.98-6.19C.92 16.46 0 20.12 0 24c0 3.88.92 7.54 2.56 10.78l7.97-6.19z"/><path fill="#34A853" d="M24 48c6.48 0 11.93-2.13 15.89-5.81l-7.73-6c-2.15 1.45-4.92 2.3-8.16 2.3-6.26 0-11.57-4.22-13.47-9.91l-7.98 6.19C6.51 42.62 14.62 48 24 48z"/></svg>
+      Sign in with Google
+    </button>
+    <p class="loginMsg" id="loginMsg"></p>
+  </div>
+</div>
+
+<!-- The tracker (hidden until ready / signed in) -->
+<div class="wrap app-hidden" id="app">
+  <header class="topbar">
+    <div>
+      <h1>💳 Credit Card Reward Maxing</h1>
+      <div class="sub">Check off and log what you capture. Each card turns <b style="color:var(--green)">green</b> once it out-earns its fee.</div>
+    </div>
+    <div class="userbox" id="userbox" style="display:none">
+      <img class="avatar" id="uAvatar" alt="">
+      <span id="uName"></span>
+      <button class="ghost" id="signoutBtn">Sign out</button>
+    </div>
+  </header>
+
+  <div class="banner" id="modeBanner" hidden></div>
+
+  <div class="overview">
+    <div class="stat"><div class="k">Total Annual Fees</div><div class="v" id="oFee">—</div></div>
+    <div class="stat"><div class="k">Captured to Date</div><div class="v" id="oCap">—</div></div>
+    <div class="stat"><div class="k">Net vs Fees</div><div class="v" id="oNet">—</div></div>
+    <div class="stat"><div class="k">Max Trackable Value</div><div class="v" id="oMax">—</div></div>
+  </div>
+  <div class="bar" id="oBarWrap"><span id="oBar"></span></div>
+  <div class="sub" style="margin-top:6px" id="oPct"></div>
+
+  <div id="cards"></div>
+
+  <button class="reset" onclick="resetAll()">Reset all progress</button>
+
+  <div class="foot" id="foot"></div>
+</div>
+
+<script src="cards.js"></script>
+<script src="firebase-config.js"></script>
+<script type="module" src="app.js"></script>
+</body>
+</html>
