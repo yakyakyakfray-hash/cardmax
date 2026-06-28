@@ -1,6 +1,6 @@
 /* CardMax service worker — app-shell caching for offline + installability.
    Bump CACHE_VERSION whenever you change cached assets so clients refresh. */
-const CACHE_VERSION = "cardmax-v4";
+const CACHE_VERSION = "cardmax-v5";
 const APP_SHELL = [
   "./",
   "./index.html",

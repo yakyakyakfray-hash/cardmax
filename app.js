@@ -69,11 +69,11 @@ function render(){
       <div class="cbar"><span style="width:${pct}%"></span></div>`;
     card.items.forEach(it=>{
       const [id,name,val,freq,catg,how]=it;
-      const c=cap(id);const done=val>0&&c>=val;
+      const c=cap(id);const done=val>0?c>=val:c>0;
       const exp=freq.indexOf("ENDS")>-1;
       const row=document.createElement("div");row.className="row"+(done?" done":"");
       row.innerHTML=`
-        <input type="checkbox" class="cb" ${done?"checked":""} ${val?"":"disabled"} data-full="${id}">
+        <input type="checkbox" class="cb" ${done?"checked":""} data-full="${id}">
         <div class="main">
           <div class="name">${name}</div>
           <div class="meta"><span class="chip ${exp?'exp':''}">${freq}</span><span class="chip">${catg}</span></div>
@@ -108,11 +108,15 @@ function bind(){
     document.getElementById("how-"+b.dataset.how).classList.toggle("show");});
   document.querySelectorAll("[data-full]").forEach(cb=>cb.onchange=()=>{
     const id=cb.dataset.full;const it=find(id);
-    setBenefit(id, cb.checked?it[2]:0);});
-  document.querySelectorAll("[data-inp]").forEach(inp=>inp.onchange=()=>{
-    const id=inp.dataset.inp;const it=find(id);
-    let v=Math.max(0,Math.min(Number(inp.value||0),it[2]));
-    setBenefit(id, v);});
+    setBenefit(id, cb.checked?(it[2]||1):0);});
+  document.querySelectorAll("[data-inp]").forEach(inp=>{
+    const it=find(inp.dataset.inp);
+    const clamp=()=>Math.max(0,Math.min(Number(inp.value||0),it[2]));
+    // Persist on every keystroke so refreshing never loses an un-blurred edit…
+    inp.oninput=()=>{ state[inp.dataset.inp]=clamp(); saveLocal(); scheduleCloudWrite(); };
+    // …and recompute totals / re-render when the field is committed (blur/Enter).
+    inp.onchange=()=>setBenefit(inp.dataset.inp, clamp());
+  });
 }
 window.resetAll=function(){ if(confirm("Clear all logged progress?")){ state={}; saveLocal(); scheduleCloudWrite(); render(); } };
 
